@@ -1,6 +1,9 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+#from pandas import Timestamp
+import datetime
+from dateutil.relativedelta import relativedelta
 
 #1st data: current month
 M_DATA_URL = 'https://github.com/waikho/st_ICI/raw/main/ICI_mth.csv'
@@ -47,3 +50,21 @@ if columns_to_plot:
 
 else:
     st.write("No columns selected.")
+
+#Select month-range using st.select_slider to calculate MoM change
+#st.select_slider can select any data type, including str
+
+# Convert df2 index to list and convert to string format for slider
+#dates = df2.index.strftime('%Y-%m').tolist()
+dates = df2.index.tolist()
+
+# Convert Timestamp objects to string and format them to show only year and month
+formatted_dates = [timestamp.strftime('%Y-%m') for timestamp in dates]
+
+MoM_start, MoM_end = st.select_slider('Select the month to show MoM change:', 
+                                      options=formatted_dates[-5:],
+                                      value=(formatted_dates[-2],formatted_dates[-1]))
+
+st.write('From: ', MoM_start)
+st.write('To: ', MoM_end)
+
