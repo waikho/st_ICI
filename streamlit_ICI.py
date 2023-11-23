@@ -8,7 +8,7 @@ M_DATA_URL = 'https://github.com/waikho/st_ICI/raw/main/ICI_mth.csv'
 df1 = pd.read_csv(M_DATA_URL)
 
 #display
-st.subheader('Weekly price for the current month')
+st.subheader('Weekly Price for Current Month')
 df1
 
 #2nd data: past years
@@ -26,6 +26,7 @@ for col in df2.columns:
 options = df2.columns.tolist()
 
 # Use the multiselect widget to select columns to plot
+st.subheader('Historical Monthly Levels')
 columns_to_plot = st.multiselect('Select columns to plot:', options, default=options)
 
 # Check if any columns have been selected
@@ -59,6 +60,8 @@ dates = df2.index.tolist()
 # Convert Timestamp objects to string and format them to show only year and month
 formatted_dates = [timestamp.strftime('%Y-%m') for timestamp in dates]
 
+
+st.subheader('Month-on-Month Price Changes')
 MoM_start, MoM_end = st.select_slider('Select the month to show MoM change:', 
                                       options=formatted_dates[-12:],
                                       value=(formatted_dates[-2],formatted_dates[-1]))
