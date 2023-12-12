@@ -61,6 +61,22 @@ dates = df2.index.tolist()
 formatted_dates = [timestamp.strftime('%Y-%m') for timestamp in dates]
 
 
+#Add a download button to download df2 as a CSV
+@st.cache_data
+def convert_df(df):
+    # IMPORTANT: Cache the conversion to prevent computation on every rerun
+    return df.to_csv().encode('utf-8')
+
+csv = convert_df(df2)
+
+st.download_button(
+    label="Download monthly coal price data",
+    data=csv,
+    file_name='ICI prices.csv',
+    mime='text/csv',
+)
+
+
 st.subheader('Month-on-Month Price Changes')
 MoM_start, MoM_end = st.select_slider('Select the month to show MoM change:', 
                                       options=formatted_dates[-12:],
@@ -99,7 +115,8 @@ ax.yaxis.label.set_color('white')
 # annotate bars
 for bar in bars:
     y_val = bar.get_height()
+    text_color = 'white' if y_val < 0 else 'black'  # Choose text color based on y_val
     plt.text(bar.get_x() + bar.get_width()/2, y_val, round(y_val, 2), 
-             va='bottom' if y_val < 0 else 'top', color='white')
+             va='bottom' if y_val < 0 else 'top', color=text_color)
 
 st.pyplot(fig)
